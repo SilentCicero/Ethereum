@@ -3,7 +3,6 @@
 After reading the TrustedFeeds.org idea, I wanted to prototype a feed marketplace design that is on-chain (and with a few modifications to the TrustedFeeds idea). Many of the contract specifications listed in the TrustedFeeds post are followed here, with the exception of a few.
 
 Below is the project specifications. Everything is open-source and written in solidity. Feel free to do what ever you want with it. UI and a better/cleaner SOL code coming soon.
-https://github.com/SilentCicero/Ethereum/tree/master/Feedlot
 
 #The Concept
 Feedlot is an on-chain decentralized price feed marketplace that enables feed buyers to find, check, review and establish connections with feed providers (sellers). Feed buyers can request price feeds and have providers, of their choosing, provide price feeds for their intended purpose.
