@@ -1,4 +1,4 @@
-# Feedlot - A Decentralized Price Feed Market Place
+# Feedlot - A Decentralized Price Feed Marketplace
 
 ** This project is in its alpha stages, so excuse the late night coding.
 
