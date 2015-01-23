@@ -76,6 +76,7 @@ contract Feedlot
     mapping(uint => Feed) feeds;
     mapping(uint => Review) reviews;
     
+    // The On-Chain Price Feed Marketplace
     function Feedlot()
     {
         num_requests = 0;
@@ -239,6 +240,18 @@ contract Feedlot
         if(msg.sender == get_request.from)
         {
             retVal = get_request.num_responses;
+        }
+    }
+    
+    // Get a Particular Response
+    function get_response(uint request_id
+    , uint response_id) returns (Response retVal)
+    {
+        FeedRequest get_request = requests[request_id];
+        
+        if(msg.sender == get_request.from)
+        {
+            retVal = get_request.responses[response_id];
         }
     }
     
