@@ -1,8 +1,8 @@
-# FeedRoll - A Decentralized Price Feed Market Place
+# Feedlot - A Decentralized Price Feed Market Place
 
 ** This project is in its alpha stages, so excuse the late night coding.
 
-FeedRoll, based on the Trusted Feeds.org idea, is an on-chain
+Feedlot, based on the Trusted Feeds.org idea, is an on-chain
 decentralized feed exchange where feed buyers can request feeds and have
 trusted feed providers respond to their requests.
 
