@@ -116,6 +116,7 @@ contract Feedlot
         {
             num_reviews++;
             Review new_review = reviews[num_reviews];
+            new_review.provider = get_receipt.provider;
             new_review.rating = rating;
             new_review.short_review = short_review;
         }
