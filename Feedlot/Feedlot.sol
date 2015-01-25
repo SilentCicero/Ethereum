@@ -109,8 +109,7 @@ contract Feedlot
     }
     
     // Review Provider
-    // ** Only feed buyers can review providers they have had 
-    // dealings with.
+    // **Only feed buyers can review providers they have had dealings with.
     // Buyers should keep their receipts, just in case they want
     // to review a provider later on.
     function review_provider(uint receipt_id, uint rating
@@ -217,10 +216,10 @@ contract Feedlot
         }
     }
     
-    // Respond to Feed request
-    // Once the Provider Responds, they will have to watch for a response
-    // from the feed buyer.
-    // Althought the feed provider could be alerted via whisper.
+    /* Respond to Feed request
+    Once the Provider Responds, they will have to watch for a response
+    from the feed buyer.
+    Althought the feed provider could be alerted via whisper */
     function respond(uint request_id, uint price)
     {
         if(FeedProviders(ProvidersAddress).nameOf(msg.sender) != "")
