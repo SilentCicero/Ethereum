@@ -36,6 +36,11 @@ contract FeedProviders
 		addr = new_name_lookup;
 	}
 	
+	function providerOf(address addr) constant returns (Provider provider) 
+	{
+	    provider = providers[addr];
+	}
+	
 	function nameOf(address addr) constant returns (string32 name) 
 	{
 		name = providers[addr].name;
