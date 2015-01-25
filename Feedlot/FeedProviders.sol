@@ -43,5 +43,6 @@ contract FeedProviders
 	
 	function kill() 
 	{
+		// Todo
 	}
 }
