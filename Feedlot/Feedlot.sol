@@ -81,6 +81,10 @@ contract Feedlot
     function Feedlot()
     {
         num_requests = 0;
+        num_receipts = 0;
+        num_feeds = 0;
+        num_reviews = 0;
+        num_responses = 0;
         feed_price = 1000; // 1000 Wie Price to Setup Feed
         feed_request_price = 1000; // 1000 Wei Priceto Request Feed
         objection_timeframe = 86400; // 1 Day Objection Period
