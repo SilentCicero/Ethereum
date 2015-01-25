@@ -257,7 +257,7 @@ contract Feedlot
     
     // Request a New Feed
     function request_feed(uint8 type, string32 cron
-    , uint timeout, string32 description)
+    , uint timeout, string32 description) returns (uint request_id)
     {
         /*
         TYPE
@@ -296,6 +296,7 @@ contract Feedlot
             new_request.cron = cron;
             new_request.timeout = timeout;
             new_request.description = description;
+            request_id = id;
         }
     }
     
