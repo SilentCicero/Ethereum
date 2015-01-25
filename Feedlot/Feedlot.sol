@@ -48,10 +48,9 @@ contract Feedlot
         address delivery_address;
         address provider;
         uint created;
-        uint num_responses;
         uint feed_id;
         uint receipt_id;
-        mapping(uint => Response) responses;
+        uint num_responses;
     }
     
     struct Review
@@ -69,14 +68,16 @@ contract Feedlot
     uint num_receipts;
     uint num_feeds;
     uint num_reviews;
+    uint num_responses;
     address ProvidersAddress;
-    address owner;
-    mapping(uint => FeedRequest) requests;
-    mapping(uint => Receipt) receipts;
-    mapping(uint => Feed) feeds;
-    mapping(uint => Review) reviews;
+    address owner; // Contract Owner
     
-    // The On-Chain Price Feed Marketplace
+    mapping(uint => FeedRequest) requests; // Price Feed Requests
+    mapping(uint => Receipt) receipts; // Transaction Receipts (proof of interaciton)
+    mapping(uint => Feed) feeds; // Price Feeds
+    mapping(uint => Review) reviews; // Provider Reviews
+    mapping(uint => mapping(uint => Response)) responses; // Request Responses
+    
     function Feedlot()
     {
         num_requests = 0;
@@ -192,7 +193,7 @@ contract Feedlot
         FeedRequest get_request = requests[request_id];
         if(get_request.from == msg.sender)
         {
-            Response get_response = get_request.responses[provider_response_id];
+            Response get_response = responses[request_id][provider_response_id];
         
             if(get_response.provider != address(0))
             {
@@ -223,8 +224,9 @@ contract Feedlot
             FeedRequest get_request = requests[request_id];
             if(get_request.from != address(0))
             {
+                num_responses += 1;
                 get_request.num_responses += 1;
-                Response new_response = get_request.responses[get_request.num_responses];
+                Response new_response = responses[request_id][num_responses];
                 
                 new_response.price = price;
                 new_response.provider = msg.sender;
@@ -251,11 +253,11 @@ contract Feedlot
         
         if(msg.sender == get_request.from)
         {
-            retVal = get_request.responses[response_id];
+            retVal = responses[response_id][response_id];
         }
     }
     
-    // Request a New Feed
+    // Request a New Price Feed
     function request_feed(uint8 type, string32 cron
     , uint timeout, string32 description) returns (uint request_id)
     {
@@ -298,6 +300,18 @@ contract Feedlot
             new_request.description = description;
             request_id = id;
         }
+    }
+    
+    // Get Number of Price Feed Requests
+    function get_num_requests() returns (uint retVal)
+    {
+        retVal = num_requests;
+    }
+    
+    // Get Request Data
+    function get_request(uint request_id) returns (FeedRequest retVal)
+    {
+        retVal = requests[request_id];
     }
     
     // Set Global Request Price (too prevent spam)
