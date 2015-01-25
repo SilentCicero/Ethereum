@@ -41,8 +41,8 @@ contract FeedProviders
 		name = providers[addr].name;
 	}
 	
+	// Todo
 	function kill() 
 	{
-		// Todo
 	}
 }
