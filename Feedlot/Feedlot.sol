@@ -83,8 +83,8 @@ contract Feedlot
         feed_price = 1000; // 1000 Wie Price to Setup Feed
         feed_request_price = 1000; // 1000 Wei Priceto Request Feed
         objection_timeframe = 86400; // 1 Day Objection Period
-        owner = 0xdf494886e70b06e474c3fbfffe2f23123;
-        ProvidersAddress = 0xd5f9d8d94886e70b06e474c3fb14fd43e2f23970;
+        owner = 0xc7e14ab7e82b94b7aeacb36150720a5646732c69;
+        ProvidersAddress = 0xdf8bbe8536ce8ce569ff53f18355f6356d99e6e1;
     }
     
     // Allow Feed provider to connect feed to feed request.
