@@ -292,7 +292,8 @@ contract Feedlot
         
         if(msg.value > feed_request_price)
         {
-            uint id = num_requests++;
+            num_requests++;
+            uint id = num_requests;
             FeedRequest new_request = requests[id];
             new_request.num_responses = 0;
             new_request.from = msg.sender;
@@ -301,20 +302,20 @@ contract Feedlot
             new_request.cron = cron;
             new_request.timeout = timeout;
             new_request.description = description;
-            request_id = id;
+            return id;
         }
     }
     
     // Get Number of Price Feed Requests
     function get_num_requests() returns (uint retVal)
     {
-        retVal = num_requests;
+        return num_requests;
     }
     
     // Get Request Data
     function get_request(uint request_id) returns (FeedRequest retVal)
     {
-        retVal = requests[request_id];
+        return requests[request_id];
     }
     
     // Set Global Request Price (too prevent spam)
