@@ -10,7 +10,7 @@ contract TicTacToe
         uint balance; // The collective amount at stake
         uint turn; // Always the opposite of present players turn
         address opposition; // The opposition player
-        uint default_time; // The time the next player has until they default
+        uint time_limit; // The time the next player has until they default
         Board board; // The actual board
     }
     
@@ -49,7 +49,7 @@ contract TicTacToe
             if(msg.sender == host)
                 player = 1;
                
-            if(player == g.turn || block.timestamp > g.default_time)
+            if(player == g.turn || block.timestamp > g.time_limit)
                 return;
                 
             g.board.positions[row][column] = player;
@@ -59,6 +59,8 @@ contract TicTacToe
                     host.send(g.balance);
                 else
                     g.opposition.send(g.balance);
+                    
+                g.balance = 0;
                 return;
             }
             else
@@ -67,11 +69,27 @@ contract TicTacToe
                 {
                     host.send(g.balance/2);
                     g.opposition.send(g.balance/2);
+                    g.balance = 0;
                     return;
                 }
             }
             g.turn = player;
-            g.default_time = block.timestamp + (3600);
+            g.time_limit = block.timestamp + (450); // around 7 * 1/2 minutes
+        }
+    }
+    
+    function claim_reward(address host) returns (bool retVal)
+    {
+        Game g = games[host];
+        
+        if(g.opposition != 0 
+        && g.balance > 0 
+        && block.timestamp > g.time_limit)
+        {
+            if(g.turn == 1)
+                host.send(g.balance);
+            else
+                g.opposition.send(g.balance);
         }
     }
     
@@ -116,9 +134,9 @@ contract TicTacToe
     function clear(address host)
     {
         Game g = games[host];
-        if(msg.sender == host && g.balance > 0)
+        if(msg.sender == host && g.balance == 0)
+
         {
-            g.balance = 0;
             g.turn = 1;
             g.opposition = 0;
             for (uint r = 0; r < 3; ++r)
