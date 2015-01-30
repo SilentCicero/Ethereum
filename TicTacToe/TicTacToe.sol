@@ -28,7 +28,7 @@ contract TicTacToe
     
     function join(address host)
     {
-        Game g = games[msg.sender];
+        Game g = games[host];
         if(msg.value > 0
         && msg.sender != host)
         {
@@ -145,3 +145,4 @@ contract TicTacToe
         }
     }
 }
+
