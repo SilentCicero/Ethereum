@@ -61,13 +61,7 @@ contract TicTacToe
             
             if(is_winner(host, player))
             {
-                if(player == 1)
-                    host.send(g.balance);
-                else
-                    g.opposition.send(g.balance);
-                
-                g.balance = 0;
-                clear(host);
+                g.time_limit = block.timestamp - 60;
                 return;
             }
                         
@@ -94,30 +88,26 @@ contract TicTacToe
         }
     }
     
+    function check(address host, uint player, uint r1, uint r2, uint r3,
+    uint c1, uint c2, uint c3) returns (bool retVal)
+    {
+        Game g = games[host];
+        if(g.board[r1][c1] == player && g.board[r2][c2] == player
+        && g.board[r3][c3] == player)
+            return true;
+    }
+    
     function is_winner(address host, uint player) returns (bool winner)
     {
         Game g = games[host];
-        for(uint r; r < 3; r++)
-            if(g.board[r][0] == player
-            && g.board[r][1] == player
-            && g.board[r][2] == player)
-                return true;
-                
-        for(uint c; c < 3; c++)
-            if(g.board[0][c] == player
-            && g.board[1][c] == player
-            && g.board[2][c] == player)
-                return true;
-            
-        if((g.board[0][0] == player
-        && g.board[1][1] == player
-        && g.board[2][2] == player)
-        || (g.board[0][2] == player
-        && g.board[1][1] == player
-        && g.board[2][0] == player)
-        || (g.turn == player 
-        && block.timestamp >= g.time_limit))
+        if(check(host, player, 0, 1, 2, 0, 1, 2)
+        || check(host, player, 0, 1, 2, 2, 1, 0))
             return true;
+            
+        for(uint r; r < 3; r++)
+            if(check(host, player, r, r, r, 0, 1, 2)
+            || check(host, player, 0, 1, 2, r, r, r))
+                return true;
     }
     
     function is_full(address host) returns (bool retVal)
@@ -151,7 +141,6 @@ contract TicTacToe
     uint o_timelimit, uint o_turn, uint orow1, uint orow2, uint orow3)
     {
         Game g = games[host];
-
         o_balance = g.balance;
         o_opposition = g.opposition;
         o_timelimit = g.time_limit;
