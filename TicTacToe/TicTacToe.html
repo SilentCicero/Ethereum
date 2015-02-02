@@ -1,0 +1,176 @@
+<!doctype>
+<html>
+
+<head>
+<script type="text/javascript" src="js/bignumber.js/bignumber.min.js"></script>
+<script type="text/javascript" src="../dist/ethereum.js"></script>
+<script type="text/javascript" src="MooTools-Core-1.5.1.js"></script>
+<script type="text/javascript">
+
+/*
+
+var TicTacToe = web3.eth.contractFromAbi([{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"join","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"get_state","outputs":[{"name":"o_balance","type":"uint256"},{"name":"o_opposition","type":"address"},{"name":"o_timelimit","type":"uint256"},{"name":"o_turn","type":"uint256"},{"name":"orow1","type":"uint256"},{"name":"orow2","type":"uint256"},{"name":"orow3","type":"uint256"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"is_full","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"claim_reward","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"player","type":"uint256"}],"name":"is_winner","outputs":[{"name":"winner","type":"bool"}]},{"constant":true,"inputs":[],"name":"games","outputs":[{"name":"games","type":"mapping(address=>structGame)"}]},{"constant":false,"inputs":[],"name":"start","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"row","type":"uint256"},{"name":"column","type":"uint256"}],"name":"play","outputs":[]}]);
+contract TicTacToe{function join(address host){}function get_state(address host)returns(uint256 o_balance,address o_opposition,uint256 o_timelimit,uint256 o_turn,uint256 orow1,uint256 orow2,uint256 orow3){}function is_full(address host)returns(bool retVal){}function claim_reward(address host)returns(bool retVal){}function is_winner(address host,uint256 player)returns(bool winner){}function games()constant returns(mapping(address => struct Game) games){}function start(){}function play(address host,uint256 row,uint256 column){}}
+28ffe6c8… :join
+34ca175e… :get_state
+38291955… :is_full
+53d1a3b7… :claim_reward
+8ae115cc… :is_winner
+955a015b… :games
+be9a6555… :start
+e8f81243… :play
+
+*/
+
+var addr1 = "0x99704a2eb200abcc81b44e685f113bb83eaec43a";
+var addr2 = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce";
+
+String.prototype.replaceAll = function (find, replace) {
+    var str = this;
+    return str.replace(new RegExp(find, 'g'), replace);
+};
+
+var eth = web3.eth;
+var contractAbi = [{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"join","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"get_state","outputs":[{"name":"o_balance","type":"uint256"},{"name":"o_opposition","type":"address"},{"name":"o_timelimit","type":"uint256"},{"name":"o_turn","type":"uint256"},{"name":"orow1","type":"uint256"},{"name":"orow2","type":"uint256"},{"name":"orow3","type":"uint256"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"is_full","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"claim_reward","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"player","type":"uint256"}],"name":"is_winner","outputs":[{"name":"winner","type":"bool"}]},{"constant":true,"inputs":[],"name":"games","outputs":[{"name":"games","type":"mapping(address=>structGame)"}]},{"constant":false,"inputs":[],"name":"start","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"row","type":"uint256"},{"name":"column","type":"uint256"}],"name":"play","outputs":[]}];
+
+var contractAddr = "0x0f87b3bc29efc8c397d73bad9543372273c2735d";
+var contract = eth.contract(contractAddr, contractAbi);
+
+
+var started = 0;
+
+function update()
+{
+	if(started == 1)
+	{
+		// Get State
+		var state = contract.call().get_state(addr1);
+		alert(state[5]);
+
+		// Get Game Balance
+		document.getElementById("balance").innerText = "Pot: " + state[0];
+
+		// Get Turn
+		document.getElementById("turn").innerText = "Turn: " + (state[3] == 1 ? ' Player 2 ' : 'Player 1');
+
+		// Get Timelimit
+		var number = web3.eth.number;
+		var info = web3.eth.block(number);
+		document.getElementById("timelimit").innerText = "Timeleft: " + (state[2] > 0 ? ((state[2] - info.timestamp) + ' Seconds') : 'Not Started.');
+
+		$("board").set('html', make_board(state[4]) + '<br>' + make_board(state[5]) + '<br>' + make_board(state[6]));
+
+		function make_board(row)
+		{
+			return String(row).replaceAll('1', '&nbsp;-&nbsp;').replaceAll('2', ' x ').replaceAll('3', ' 0 ');
+		}
+
+		//$("board").set('html', make_board(row_0) + '<br>' + make_board(row_1) + '<br>' + make_board(row_2));
+	}
+}
+
+function claim_reward()
+{
+	// Start Game
+	contract.transact({from: addr1}).claim_reward(addr1);
+	update();
+}
+
+function start_game()
+{
+	// Start Game
+	contract.transact({from: addr1, value: 100000}).start();
+
+	// Join Game
+	contract.transact({from: addr2, value: 100000}).join(addr1);
+	started = 1;
+	update();
+}
+
+function play(player)
+{
+	contract.transact({from: (player == 1 ? addr1 : addr2)}).play(addr1, $('row').get('value'), $('column').get('value'));
+	update();
+}
+
+function go_player_1()
+{
+	play(1);
+}
+
+function go_player_2()
+{
+	play(2);
+}
+
+window.addEvent('load', function(){
+	// Start Game
+	//contract.transact({from: addr1, value: 111}).start();
+
+	// Join Game
+	//contract.transact({from: addr2, value: 200}).join(addr1);
+
+	// Get Opposition
+	//var opposition = contract.call().get_opposition(addr1);
+	//alert(opposition);
+
+	// Player 1 Play Game
+	//contract.transact({from: addr1}).play(addr1, 2, 2);
+
+	// Player 1 Play Game
+	//contract.transact({from: addr2}).play(addr1, 2, 2);
+
+	update();
+
+	document.getElementById("loaded").innerText = "Loaded.";
+	document.getElementById("accounts").innerText = String(eth.accounts).replace(',', "  ");
+});
+</script>
+<style type="text/css">
+
+#board td
+{
+}
+
+</style>
+</head>
+<body>
+    <span id="loaded"></span>
+    <span id="accounts"></span>
+    <span id="result"></span>
+    <span id="result2"></span>
+
+    <br><br><br>
+
+    <input type="button" onclick="update();" value="Refresh" />
+    <input type="button" onclick="start_game();" value="Start Game!" />
+
+    <br><br><br>
+
+    <span id="balance"></span><br>
+    <span id="turn"></span><br>
+    <span id="timelimit"></span>
+
+    <br><br><br>
+
+    <span id="board"></span>
+
+    <br><br><br>
+
+    <input id="row" type="number" placeholder="ROW" />
+    <input id="column" type="number" placeholder="COLUMN" />
+
+    <br>
+
+    <input type="button" onclick="go_player_1();" value="Play Player 1" />
+
+    <input type="button" onclick="go_player_2();" value="Play Player 2" />
+
+
+    <br>
+    <br>
+    <br>
+
+    <input type="button" onclick="claim_reward();" value="Claim Reward" />
+</body>
+</html>
