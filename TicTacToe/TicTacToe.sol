@@ -1,5 +1,7 @@
 contract TicTacToe
 {
+    modifier has_value { if(msg.value > 0) _ }
+    
     struct Game
     {
         uint balance;
@@ -11,22 +13,20 @@ contract TicTacToe
     
     mapping (address => Game) games;
     
-    function start()
+    function start() has_value
     {
         Game g = games[msg.sender];
-        if(msg.value > 0
-        && g.balance == 0)
+        if(g.balance == 0)
         {
             clear(msg.sender);
             g.balance += msg.value;
         }
     }
     
-    function join(address host)
+    function join(address host) has_value
     {
         Game g = games[host];
-        if(msg.value > 0
-        && g.opposition == 0
+        if(g.opposition == 0
         && msg.sender != host)
         {
             g.balance += msg.value;
@@ -134,22 +134,25 @@ contract TicTacToe
             for(uint r; r < 3; r++)
                 for(uint c; c < 3; c++)
                     g.board[r][c] = 0;
+                    
+            // For Later
+            //delete games[host];
         }
     }
     
     function get_state(address host) returns (uint o_balance, address o_opposition,
-    uint o_timelimit, uint o_turn, uint orow1, uint orow2, uint orow3)
+    uint o_timelimit, uint o_turn, uint o_row1, uint o_row2, uint o_row3)
     {
         Game g = games[host];
         o_balance = g.balance;
         o_opposition = g.opposition;
         o_timelimit = g.time_limit;
         o_turn = g.turn;
-        orow1 = (100 * (g.board[0][0] + 1)) 
+        o_row1 = (100 * (g.board[0][0] + 1)) 
         + (10 * (g.board[0][1] + 1)) + (g.board[0][2] + 1);
-        orow2 = (100 * (g.board[1][0] + 1)) 
+        o_row2 = (100 * (g.board[1][0] + 1)) 
         + (10 * (g.board[1][1] + 1)) + (g.board[1][2] + 1);
-        orow3 = (100 * (g.board[2][0] + 1)) 
+        o_row3 = (100 * (g.board[2][0] + 1)) 
         + (10 * (g.board[2][1] + 1)) + (g.board[2][2] + 1);
     }
 }
