@@ -61,7 +61,13 @@ contract TicTacToe
             
             if(is_winner(host, player))
             {
-                g.time_limit = block.timestamp - 60;
+                if(player == 1)
+                    host.send(g.balance);
+                else
+                    g.opposition.send(g.balance);
+                    
+                g.balance = 0;
+                clear(host);
                 return;
             }
                         
