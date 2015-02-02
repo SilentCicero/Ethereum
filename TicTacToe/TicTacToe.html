@@ -9,11 +9,14 @@
 
 /*
 
-var TicTacToe = web3.eth.contractFromAbi([{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"join","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"get_state","outputs":[{"name":"o_balance","type":"uint256"},{"name":"o_opposition","type":"address"},{"name":"o_timelimit","type":"uint256"},{"name":"o_turn","type":"uint256"},{"name":"orow1","type":"uint256"},{"name":"orow2","type":"uint256"},{"name":"orow3","type":"uint256"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"is_full","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"claim_reward","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"player","type":"uint256"}],"name":"is_winner","outputs":[{"name":"winner","type":"bool"}]},{"constant":true,"inputs":[],"name":"games","outputs":[{"name":"games","type":"mapping(address=>structGame)"}]},{"constant":false,"inputs":[],"name":"start","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"row","type":"uint256"},{"name":"column","type":"uint256"}],"name":"play","outputs":[]}]);
-contract TicTacToe{function join(address host){}function get_state(address host)returns(uint256 o_balance,address o_opposition,uint256 o_timelimit,uint256 o_turn,uint256 orow1,uint256 orow2,uint256 orow3){}function is_full(address host)returns(bool retVal){}function claim_reward(address host)returns(bool retVal){}function is_winner(address host,uint256 player)returns(bool winner){}function games()constant returns(mapping(address => struct Game) games){}function start(){}function play(address host,uint256 row,uint256 column){}}
+var TicTacToe = web3.eth.contractFromAbi([{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"join","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"get_state","outputs":[{"name":"o_balance","type":"uint256"},{"name":"o_opposition","type":"address"},{"name":"o_timelimit","type":"uint256"},{"name":"o_turn","type":"uint256"},{"name":"orow1","type":"uint256"},{"name":"orow2","type":"uint256"},{"name":"orow3","type":"uint256"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"is_full","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"clear","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"claim_reward","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"player","type":"uint256"}],"name":"is_winner","outputs":[{"name":"winner","type":"bool"}]},{"constant":true,"inputs":[],"name":"games","outputs":[{"name":"games","type":"mapping(address=>structGame)"}]},{"constant":false,"inputs":[],"name":"start","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"row","type":"uint256"},{"name":"column","type":"uint256"}],"name":"play","outputs":[]}]);
+
+contract TicTacToe{function join(address host){}function get_state(address host)returns(uint256 o_balance,address o_opposition,uint256 o_timelimit,uint256 o_turn,uint256 orow1,uint256 orow2,uint256 orow3){}function is_full(address host)returns(bool retVal){}function clear(address host){}function claim_reward(address host)returns(bool retVal){}function is_winner(address host,uint256 player)returns(bool winner){}function games()constant returns(mapping(address => struct Game) games){}function start(){}function play(address host,uint256 row,uint256 column){}}
+
 28ffe6c8… :join
 34ca175e… :get_state
 38291955… :is_full
+3d0a4061… :clear
 53d1a3b7… :claim_reward
 8ae115cc… :is_winner
 955a015b… :games
@@ -22,24 +25,24 @@ e8f81243… :play
 
 */
 
-var addr1 = "0x99704a2eb200abcc81b44e685f113bb83eaec43a";
-var addr2 = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce";
-
 String.prototype.replaceAll = function (find, replace) {
     var str = this;
     return str.replace(new RegExp(find, 'g'), replace);
 };
 
 var eth = web3.eth;
-var contractAbi = [{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"join","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"get_state","outputs":[{"name":"o_balance","type":"uint256"},{"name":"o_opposition","type":"address"},{"name":"o_timelimit","type":"uint256"},{"name":"o_turn","type":"uint256"},{"name":"orow1","type":"uint256"},{"name":"orow2","type":"uint256"},{"name":"orow3","type":"uint256"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"is_full","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"claim_reward","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"player","type":"uint256"}],"name":"is_winner","outputs":[{"name":"winner","type":"bool"}]},{"constant":true,"inputs":[],"name":"games","outputs":[{"name":"games","type":"mapping(address=>structGame)"}]},{"constant":false,"inputs":[],"name":"start","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"row","type":"uint256"},{"name":"column","type":"uint256"}],"name":"play","outputs":[]}];
+var contractAbi = [{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"join","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"get_state","outputs":[{"name":"o_balance","type":"uint256"},{"name":"o_opposition","type":"address"},{"name":"o_timelimit","type":"uint256"},{"name":"o_turn","type":"uint256"},{"name":"orow1","type":"uint256"},{"name":"orow2","type":"uint256"},{"name":"orow3","type":"uint256"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"is_full","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"clear","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"}],"name":"claim_reward","outputs":[{"name":"retVal","type":"bool"}]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"player","type":"uint256"}],"name":"is_winner","outputs":[{"name":"winner","type":"bool"}]},{"constant":true,"inputs":[],"name":"games","outputs":[{"name":"games","type":"mapping(address=>structGame)"}]},{"constant":false,"inputs":[],"name":"start","outputs":[]},{"constant":false,"inputs":[{"name":"host","type":"address"},{"name":"row","type":"uint256"},{"name":"column","type":"uint256"}],"name":"play","outputs":[]}];
 
-var contractAddr = "0x0f87b3bc29efc8c397d73bad9543372273c2735d";
+var addr1 = "0x99704a2eb200abcc81b44e685f113bb83eaec43a"; // Player 1 Address
+var addr2 = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce"; // Player 2 Address
+
+var contractAddr = "0x0f87b3bc29efc8c397d73bad9543372273c2735d"; // Contract Address
 var contract = eth.contract(contractAddr, contractAbi);
 
 
 var started = 0;
 
-function update()
+function update() // Game State Update
 {
 	if(started == 1)
 	{
@@ -69,14 +72,14 @@ function update()
 	}
 }
 
-function claim_reward()
+function claim_reward() // Claim reward if other player drops out.
 {
 	// Start Game
 	contract.transact({from: addr1}).claim_reward(addr1);
 	update();
 }
 
-function start_game()
+function start_game() // Start game add to pot.
 {
 	// Start Game
 	contract.transact({from: addr1, value: 100000}).start();
@@ -87,39 +90,23 @@ function start_game()
 	update();
 }
 
-function play(player)
+function play(player) // make play
 {
 	contract.transact({from: (player == 1 ? addr1 : addr2)}).play(addr1, $('row').get('value'), $('column').get('value'));
 	update();
 }
 
-function go_player_1()
+function go_player_1() // player 1 make play.
 {
 	play(1);
 }
 
-function go_player_2()
+function go_player_2() // player 2 make play.
 {
 	play(2);
 }
 
 window.addEvent('load', function(){
-	// Start Game
-	//contract.transact({from: addr1, value: 111}).start();
-
-	// Join Game
-	//contract.transact({from: addr2, value: 200}).join(addr1);
-
-	// Get Opposition
-	//var opposition = contract.call().get_opposition(addr1);
-	//alert(opposition);
-
-	// Player 1 Play Game
-	//contract.transact({from: addr1}).play(addr1, 2, 2);
-
-	// Player 1 Play Game
-	//contract.transact({from: addr2}).play(addr1, 2, 2);
-
 	update();
 
 	document.getElementById("loaded").innerText = "Loaded.";
@@ -127,10 +114,6 @@ window.addEvent('load', function(){
 });
 </script>
 <style type="text/css">
-
-#board td
-{
-}
 
 </style>
 </head>
