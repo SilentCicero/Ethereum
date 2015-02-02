@@ -4,4 +4,4 @@ Host a game, place a bet and get another to join your game and add to the pot. T
 
 # Tipsy-Factor
 
-This was built at a bar, I may have been tipsy. Excuse the lack of flare.
+This was built at a bar, I may have been tipsy. Excuse the present lack of flare.
