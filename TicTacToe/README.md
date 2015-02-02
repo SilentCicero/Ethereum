@@ -4,4 +4,4 @@ Host a game, place a bet and get another to join your game and add to the pot. T
 
 # Drunk Factor
 
-I did this at the bar, I may have ben tipsy. Excuse the lack of flare.
+I did this at the bar, I may have been tipsy. Excuse the lack of flare.
